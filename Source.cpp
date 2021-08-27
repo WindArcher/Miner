@@ -8,13 +8,13 @@ int main()
 {
 	int FIELD_NUM = 4; const int WIDTH = 32;
 	srand(time(0));
-	RenderWindow window(VideoMode(400, 400), "Miner");
+	
 	std::cout << "Enter field size: ";
 	std::cin >> FIELD_NUM;
+	RenderWindow window(VideoMode(FIELD_NUM*WIDTH, FIELD_NUM * WIDTH), "Miner");
 	Texture t;
 	t.loadFromFile("image/sprite.jpg");
 	Sprite s(t);
-
 	std::vector<std::vector<int>> gridLogic(FIELD_NUM + 2, std::vector<int>(FIELD_NUM + 2));//bigger array was taken to prevent out of range,when init mines and numbers
 	std::vector<std::vector<int>> gridView(FIELD_NUM + 2, std::vector<int>(FIELD_NUM + 2));
 	/*creating mines in 1 to FIELD_NUM - 2 range(0 -non-active field,1-active field)
@@ -55,23 +55,12 @@ int main()
 	while (window.isOpen())
 	{
 		Event e;
-		window.clear(Color::White);
-		for (int i = 1; i <= FIELD_NUM; i++)
-			for (int j = 1; j <= FIELD_NUM; j++)
-			{
-
-				s.setTextureRect(IntRect(gridView[i][j] * WIDTH, 0, WIDTH, WIDTH));
-				s.setPosition(i * WIDTH, j * WIDTH);
-				window.draw(s);
-			}
-
-		window.display();
+	
 		while (window.pollEvent(e))
 		{
 			Vector2i pos = Mouse::getPosition(window);
-			int x = pos.x / WIDTH;
-			int y = pos.y / WIDTH;
-
+			int x = 1+(pos.x / WIDTH);
+			int y = 1+(pos.y / WIDTH);
 			if (e.type == Event::Closed)
 				window.close();
 
@@ -79,6 +68,7 @@ int main()
 			{
 				if (e.key.code == Mouse::Left)
 				{
+					std::cout << x << " " << y<< "\n";
 					gridView[x][y] = gridLogic[x][y];
 					if (gridLogic[x][y] == 9)
 						for (int i = 1; i <= FIELD_NUM; i++)
@@ -88,10 +78,20 @@ int main()
 							}
 				}
 				else if (e.key.code == Mouse::Right) gridView[x][y] = 11;
-				break;
 			}
 		}
+		window.clear(Color::White);
+		for (int i = 1; i <= FIELD_NUM; i++)
+			for (int j = 1; j <= FIELD_NUM; j++)
+			{
+
+				s.setTextureRect(IntRect(gridView[i][j] * WIDTH, 0, WIDTH, WIDTH));
+				s.setPosition((i - 1) * WIDTH, (j - 1) * WIDTH);
+				window.draw(s);
+			}
+
+		window.display();
 			
-		}
+	}
 		return 0;
 	}
