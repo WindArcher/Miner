@@ -66,15 +66,18 @@ void MinerField::SetUpNumbers()
 }
 void MinerField::OpenVoidCells(vector<vector<int>>& view, int x, int y)
 {
-	if (x >= (FIELD_NUM + 2) || y >= (FIELD_NUM + 2))
+	if (x < 0 || x > FIELD_NUM) return;
+	if (y < 0 || y > FIELD_NUM) return;
+	if (view[x][y] != 10)
 		return;
-	if (gridLogic[x][y] == 10 || gridLogic[x][y]==11 )
+	if (gridLogic[x][y] == 10 || gridLogic[x][y]==11 ||gridLogic[x][y]==-1)
 		return;
 	if ((gridLogic[x][y] <= 8) && (gridLogic[x][y] >= 1))
 	{
 		view[x][y] = gridLogic[x][y];
 		return;
 	}
+	
 	view[x][y] = gridLogic[x][y];
 	OpenVoidCells(view,x + 1, y); //North;
 	OpenVoidCells(view,x - 1, y); //South

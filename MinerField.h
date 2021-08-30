@@ -11,7 +11,6 @@ class MinerField
 	vector < vector<int>> gridLogic;
 	void SetUpBombs();
 	void OpenVoidCells(vector<vector<int>>&,int,int);
-	//list<int> SafeZone;
 	void SetUpNumbers();
 public:
 	bool IsCreated();
